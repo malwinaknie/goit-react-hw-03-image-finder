@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types'
 import styles from './searchbar.module.css'
-
+import Notiflix from "notiflix";
 
 class Searchbar extends Component {
     state = {
@@ -14,8 +14,16 @@ class Searchbar extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.onSubmit(this.state.query)
-    } 
+
+        if (this.state.query.trim() === '') {
+            return Notiflix.Notify.warning(
+                'Type something to see the results'
+            );
+        }
+        this.props.onSubmit(this.state);
+        this.setState({query: ''});
+    };
+
     render() {
         return(
             <header className={(styles["Searchbar"])}>
@@ -31,7 +39,7 @@ class Searchbar extends Component {
                 autofocus
                 placeholder="Search images and photos"
                 onChange={this.handleChange}
-                value={this.state.que}
+                value={this.state.query}
                 />
             </form>
             </header>
